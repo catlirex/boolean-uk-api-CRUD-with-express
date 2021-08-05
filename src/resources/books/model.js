@@ -38,7 +38,7 @@ function Book() {
 
   async function selectAllBooks() {
     const selectAll = `
-    SELECT *  books
+    SELECT * FROM books
     LIMIT 50`;
 
     try {
