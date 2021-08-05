@@ -38,11 +38,15 @@ function Book() {
 
   async function selectAllBooks() {
     const selectAll = `
-    SELECT * FROM books
+    SELECT *  books
     LIMIT 50`;
 
-    const result = await db.query(selectAll);
-    return result.rows;
+    try {
+      const result = await db.query(selectAll);
+      return result.rows;
+    } catch (e) {
+      throw e;
+    }
   }
 
   async function selectOneBook(bookId) {
@@ -50,8 +54,12 @@ function Book() {
       SELECT * FROM books
       WHERE id = $1;`;
 
-    const result = await db.query(selectOne, [bookId]);
-    return result.rows[0];
+    try {
+      const result = await db.query(selectOne, [bookId]);
+      return result.rows[0];
+    } catch (e) {
+      throw e;
+    }
   }
 
   async function createOneBook(newBook) {
@@ -62,14 +70,18 @@ function Book() {
     RETURNING *;
     `;
 
-    const result = await db.query(createOne, [
-      title,
-      type,
-      author,
-      topic,
-      publicationdate,
-    ]);
-    return result.rows[0];
+    try {
+      const result = await db.query(createOne, [
+        title,
+        type,
+        author,
+        topic,
+        publicationdate,
+      ]);
+      return result.rows[0];
+    } catch (e) {
+      throw e;
+    }
   }
 
   async function updateOneBook(id, toUpdateBook) {
@@ -83,25 +95,33 @@ function Book() {
             publicationdate = $6
       WHERE id = $1
       RETURNING *;`;
+    try {
+      const result = await db.query(updateBook, [
+        id,
+        title,
+        type,
+        author,
+        topic,
+        publicationdate,
+      ]);
 
-    const result = await db.query(updateBook, [
-      id,
-      title,
-      type,
-      author,
-      topic,
-      publicationdate,
-    ]);
-
-    return result.rows[0];
+      return result.rows[0];
+    } catch (e) {
+      throw e;
+    }
   }
 
   async function deleteServerBook(id) {
     const delBook = `
         DELETE FROM books
         WHERE id = $1;`;
-    const result = await db.query(delBook, [id]);
-    return result;
+
+    try {
+      const result = await db.query(delBook, [id]);
+      return result;
+    } catch (e) {
+      throw e;
+    }
   }
 
   createTable();
