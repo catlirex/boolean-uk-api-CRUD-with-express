@@ -44,10 +44,91 @@ function Pet() {
     return result.rows;
   }
 
+  async function selectOnePet(id) {
+    const selectOne = `
+    SELECT * FROM pets
+    WHERE id = $1;`;
+
+    try {
+      const result = await db.query(selectOne, [id]);
+      return result.rows[0];
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async function createOnePet(newPet) {
+    const { name, type, age, breed, microchip } = newPet;
+    const createOne = `
+    INSERT INTO pets (name, type, age, breed, microchip)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *;
+    `;
+
+    try {
+      const result = await db.query(createOne, [
+        name,
+        type,
+        age,
+        breed,
+        microchip,
+      ]);
+      return result.rows[0];
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async function updateOnePet(id, toUpdatePet) {
+    const { name, type, age, breed, microchip } = toUpdatePet;
+    const updatePet = `
+      UPDATE pets
+      SET   name = $2,
+            type = $3,
+            age = $4,
+            breed = $5,
+            microchip = $6
+      WHERE id = $1
+      RETURNING *;`;
+    try {
+      const result = await db.query(updatePet, [
+        id,
+        name,
+        type,
+        age,
+        breed,
+        microchip,
+      ]);
+
+      return result.rows[0];
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async function deleteServerPet(id) {
+    const delPet = `
+    DELETE FROM pets
+    WHERE id = $1;`;
+
+    try {
+      const result = await db.query(delPet, [id]);
+      return result;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   createTable();
   createMockData();
 
-  return { selectAllPet };
+  return {
+    selectAllPet,
+    selectOnePet,
+    createOnePet,
+    updateOnePet,
+    deleteServerPet,
+  };
 }
 
 module.exports = Pet;
