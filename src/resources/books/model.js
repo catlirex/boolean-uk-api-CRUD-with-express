@@ -137,6 +137,19 @@ function Book() {
     }
   }
 
+  async function selectBookByTypeWithTopic(type, topic) {
+    const selectTypeWithTopic = `
+      SELECT * FROM books
+      WHERE type = $1 AND topic = $2;`;
+
+    try {
+      const result = await db.query(selectTypeWithTopic, [type, topic]);
+      return result.rows;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   createTable();
   addMockData();
 
@@ -147,6 +160,7 @@ function Book() {
     updateOneBook,
     deleteServerBook,
     selectBookByType,
+    selectBookByTypeWithTopic,
   };
 }
 
