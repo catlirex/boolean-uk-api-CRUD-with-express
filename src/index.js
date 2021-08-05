@@ -2,10 +2,14 @@ const express = require("express");
 const morgan = require("morgan");
 const db = require("./utils/database");
 
+const bookRouter = require("./resources/books/router");
+
 const app = express();
 
 app.use(morgan("dev"));
 app.use(express.json());
+
+app.use("/books", bookRouter);
 
 app.get("*", (req, res) => {
   res.json({ ok: true });
