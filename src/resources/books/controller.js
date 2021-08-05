@@ -7,6 +7,8 @@ const {
   deleteServerBook,
   selectBookByType,
   selectBookByTypeWithTopic,
+  selectBookByAuthor,
+  selectBookByAuthorSorted,
 } = Book();
 
 function getAllBook(req, res) {
@@ -131,6 +133,33 @@ function getNonFictionBook(req, res) {
   }
 }
 
+function getBookOfAuthor(req, res) {
+  const authorName = req.params.authorName;
+  const { order } = req.query;
+
+  if (!order) {
+    selectBookByAuthor(authorName)
+      .then((result) => {
+        if (result) res.json(result);
+        else res.json({ msg: "Result not found" });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json({ msg: "Internal Server Error, try again later" });
+      });
+  } else if (order === "recent") {
+    selectBookByAuthorSorted(authorName)
+      .then((result) => {
+        if (result) res.json(result);
+        else res.json({ msg: "Result not found" });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json({ msg: "Internal Server Error, try again later" });
+      });
+  } else res.status(400).json({ ERROR: "BAD REQUEST" });
+}
+
 function bookObjChecker(checkerType, bookObject) {
   const NewBookRequirements = [
     "title",
@@ -178,4 +207,5 @@ module.exports = {
   deleteOneBook,
   getFictionBook,
   getNonFictionBook,
+  getBookOfAuthor,
 };

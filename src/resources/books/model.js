@@ -150,6 +150,33 @@ function Book() {
     }
   }
 
+  async function selectBookByAuthor(author) {
+    const selectByAuthor = `
+        SELECT * FROM books
+        WHERE author=$1;`;
+
+    try {
+      const result = await db.query(selectByAuthor, [author]);
+      return result.rows;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async function selectBookByAuthorSorted(author) {
+    const selectByAuthorOrderByDate = `
+    SELECT * FROM books
+    WHERE author=$1
+    ORDER BY publicationdate DESC;`;
+
+    try {
+      const result = await db.query(selectByAuthorOrderByDate, [author]);
+      return result.rows;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   createTable();
   addMockData();
 
@@ -161,6 +188,8 @@ function Book() {
     deleteServerBook,
     selectBookByType,
     selectBookByTypeWithTopic,
+    selectBookByAuthor,
+    selectBookByAuthorSorted,
   };
 }
 
