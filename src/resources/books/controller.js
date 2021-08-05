@@ -5,6 +5,7 @@ const {
   createOneBook,
   updateOneBook,
   deleteServerBook,
+  selectBookByType,
 } = Book();
 
 function getAllBook(req, res) {
@@ -16,18 +17,18 @@ function getAllBook(req, res) {
     });
 }
 
-function getOneBook(req, res) {
-  const bookId = req.params.id;
-  selectOneBook(bookId)
-    .then((result) => {
-      if (result) res.json(result);
-      else res.json({ ERROR: `Book not found, bookId: ${bookId}` });
-    })
-    .catch((e) => {
-      console.log(e);
-      res.status(500).json({ msg: `Internal Server Error, try again later` });
-    });
-}
+// function getOneBook(req, res) {
+//   const bookId = req.params.id;
+//   selectOneBook(bookId)
+//     .then((result) => {
+//       if (result) res.json(result);
+//       else res.json({ ERROR: `Book not found, bookId: ${bookId}` });
+//     })
+//     .catch((e) => {
+//       console.log(e);
+//       res.status(500).json({ msg: `Internal Server Error, try again later` });
+//     });
+// }
 
 function postOneBook(req, res) {
   let newBook = req.body;
@@ -81,6 +82,19 @@ function deleteOneBook(req, res) {
   });
 }
 
+function getBookByType(req, res) {
+  const selectType = req.params.type;
+  selectBookByType(selectType)
+    .then((result) => {
+      if (result.length) res.json(result);
+      else res.json({ Msg: `No Result found` });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ msg: "Internal Server Error, try again later" });
+    });
+}
+
 function bookObjChecker(checkerType, bookObject) {
   const NewBookRequirements = [
     "title",
@@ -122,8 +136,8 @@ function bookObjChecker(checkerType, bookObject) {
 
 module.exports = {
   getAllBook,
-  getOneBook,
   postOneBook,
   patchOneBook,
   deleteOneBook,
+  getBookByType,
 };
