@@ -7,6 +7,7 @@ const {
   updateOnePet,
   deleteServerPet,
   selectPetType,
+  selectPetByType,
 } = Pet();
 
 function getAllPets(req, res) {
@@ -81,11 +82,26 @@ function deleteOnePet(req, res) {
 }
 
 function getPetTypes(req, res) {
-  selectPetType().then((result) => {
-    const petTypes = [];
-    for (const target of result) petTypes.push(target.type);
-    res.json({ result: petTypes });
-  });
+  selectPetType()
+    .then((result) => {
+      const petTypes = [];
+      for (const target of result) petTypes.push(target.type);
+      res.json({ result: petTypes });
+    })
+    .catch((e) => {
+      console.log(e);
+      res.status(500).json({ msg: `Internal Server Error, try again later` });
+    });
+}
+
+function getPetByType(req, res) {
+  const type = req.params.type;
+  selectPetByType(type)
+    .then((result) => res.json(result))
+    .catch((e) => {
+      console.log(e);
+      res.status(500).json({ msg: `Internal Server Error, try again later` });
+    });
 }
 
 function petObjChecker(checkerType, petObject) {
@@ -134,4 +150,5 @@ module.exports = {
   patchOnePet,
   deleteOnePet,
   getPetTypes,
+  getPetByType,
 };

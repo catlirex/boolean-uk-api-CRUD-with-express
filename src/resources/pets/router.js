@@ -7,11 +7,13 @@ const {
   patchOnePet,
   deleteOnePet,
   getPetTypes,
+  getPetByType,
 } = require("./controller");
 
 const petRouter = express.Router();
 
 petRouter.get("/types", getPetTypes);
+petRouter.get("/types/:type", getPetByType);
 petRouter.get("/:id", getOnePet);
 petRouter.get("/", getAllPets);
 petRouter.post("/", postOnePet);
