@@ -169,6 +169,44 @@ function Pet() {
     }
   }
 
+  async function selectPetByTypeFilterMicrochip(type, microchip) {
+    const selectByTypeFilterMicrochip = `
+      SELECT * FROM pets
+      WHERE type = $1 AND microchip = $2;`;
+
+    try {
+      const result = await db.query(selectByTypeFilterMicrochip, [
+        type,
+        microchip,
+      ]);
+      return result.rows;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async function selectPetByTypeWithBreedFilterMicrochip(
+    type,
+    breed,
+    microchip
+  ) {
+    const selectByTypeWithBreedFilterMicrochip = `
+      SELECT * FROM pets
+      WHERE type =$1 AND breed = $2 AND microchip = $3;`;
+
+    try {
+      const result = await db.query(selectByTypeWithBreedFilterMicrochip, [
+        type,
+        breed,
+        microchip,
+      ]);
+
+      return result.rows;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   createTable();
   createMockData();
 
@@ -182,6 +220,8 @@ function Pet() {
     selectPetByType,
     selectPetByTypeWithBreed,
     selectAllPetFilterMicrochip,
+    selectPetByTypeFilterMicrochip,
+    selectPetByTypeWithBreedFilterMicrochip,
   };
 }
 
