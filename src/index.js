@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const db = require("./utils/database");
 
 const bookRouter = require("./resources/books/router");
+const petRouter = require("./resources/pets/router");
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 app.use("/books", bookRouter);
+app.use("/pets", petRouter);
 
 app.get("*", (req, res) => {
   res.json({ ok: true });
