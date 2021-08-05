@@ -6,6 +6,7 @@ const {
   createOnePet,
   updateOnePet,
   deleteServerPet,
+  selectPetType,
 } = Pet();
 
 function getAllPets(req, res) {
@@ -79,6 +80,14 @@ function deleteOnePet(req, res) {
   });
 }
 
+function getPetTypes(req, res) {
+  selectPetType().then((result) => {
+    const petTypes = [];
+    for (const target of result) petTypes.push(target.type);
+    res.json({ result: petTypes });
+  });
+}
+
 function petObjChecker(checkerType, petObject) {
   const NewPetRequirements = ["name", "age", "type", "breed", "microchip"];
   const UpdatePetRequirements = [
@@ -124,4 +133,5 @@ module.exports = {
   postOnePet,
   patchOnePet,
   deleteOnePet,
+  getPetTypes,
 };

@@ -119,6 +119,18 @@ function Pet() {
     }
   }
 
+  async function selectPetType() {
+    const petTypes = `
+      SELECT type FROM pets
+      GROUP BY type`;
+    try {
+      const result = await db.query(petTypes);
+      return result.rows;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   createTable();
   createMockData();
 
@@ -128,6 +140,7 @@ function Pet() {
     createOnePet,
     updateOnePet,
     deleteServerPet,
+    selectPetType,
   };
 }
 
