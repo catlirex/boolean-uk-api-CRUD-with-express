@@ -127,7 +127,7 @@ function Book() {
   async function selectBookByType(type) {
     const selectByType = `
       SELECT * FROM books
-      WHERE type=$1`;
+      WHERE type=$1;`;
 
     try {
       const result = await db.query(selectByType, [type]);
