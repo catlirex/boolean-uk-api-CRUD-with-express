@@ -144,6 +144,19 @@ function Pet() {
     }
   }
 
+  async function selectPetByTypeWithBreed(type, breed) {
+    const selectByTypeWithBreed = `
+      SELECT * FROM pets
+      WHERE type = $1 AND breed = $2;`;
+
+    try {
+      const result = await db.query(selectByTypeWithBreed, [type, breed]);
+      return result.rows;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   createTable();
   createMockData();
 
@@ -155,6 +168,7 @@ function Pet() {
     deleteServerPet,
     selectPetType,
     selectPetByType,
+    selectPetByTypeWithBreed,
   };
 }
 

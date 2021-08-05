@@ -8,6 +8,7 @@ const {
   deleteServerPet,
   selectPetType,
   selectPetByType,
+  selectPetByTypeWithBreed,
 } = Pet();
 
 function getAllPets(req, res) {
@@ -96,12 +97,22 @@ function getPetTypes(req, res) {
 
 function getPetByType(req, res) {
   const type = req.params.type;
-  selectPetByType(type)
-    .then((result) => res.json(result))
-    .catch((e) => {
-      console.log(e);
-      res.status(500).json({ msg: `Internal Server Error, try again later` });
-    });
+  const { breed } = req.query;
+  if (!breed) {
+    selectPetByType(type)
+      .then((result) => res.json(result))
+      .catch((e) => {
+        console.log(e);
+        res.status(500).json({ msg: `Internal Server Error, try again later` });
+      });
+  } else {
+    selectPetByTypeWithBreed(type, breed)
+      .then((result) => res.json(result))
+      .catch((e) => {
+        console.log(e);
+        res.status(500).json({ msg: `Internal Server Error, try again later` });
+      });
+  }
 }
 
 function petObjChecker(checkerType, petObject) {
