@@ -44,6 +44,18 @@ function Pet() {
     return result.rows;
   }
 
+  async function selectAllPetFilterMicrochip(microchip) {
+    const selectAllFilterMicrochip = `
+    SELECT * FROM pets
+    WHERE microchip=$1;`;
+    try {
+      const result = await db.query(selectAllFilterMicrochip, [microchip]);
+      return result.rows;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   async function selectOnePet(id) {
     const selectOne = `
     SELECT * FROM pets
@@ -169,6 +181,7 @@ function Pet() {
     selectPetType,
     selectPetByType,
     selectPetByTypeWithBreed,
+    selectAllPetFilterMicrochip,
   };
 }
 

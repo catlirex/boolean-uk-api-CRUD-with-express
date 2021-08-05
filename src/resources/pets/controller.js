@@ -9,10 +9,26 @@ const {
   selectPetType,
   selectPetByType,
   selectPetByTypeWithBreed,
+  selectAllPetFilterMicrochip,
 } = Pet();
 
 function getAllPets(req, res) {
-  selectAllPet().then((result) => res.json(result));
+  const { microchip } = req.query;
+  if (!microchip)
+    selectAllPet()
+      .then((result) => res.json(result))
+      .catch((e) => {
+        console.log(e);
+        res.status(500).json({ msg: `Internal Server Error, try again later` });
+      });
+
+  if (microchip)
+    selectAllPetFilterMicrochip(microchip)
+      .then((result) => res.json(result))
+      .catch((e) => {
+        console.log(e);
+        res.status(500).json({ msg: `Internal Server Error, try again later` });
+      });
 }
 
 function getOnePet(req, res) {
